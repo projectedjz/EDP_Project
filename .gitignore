@@ -416,3 +416,7 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+.vscode/settings.json
+client/learning-react-app/.env.development
+client/learning-react-app/package.json
+client/learning-react-app/package.json
