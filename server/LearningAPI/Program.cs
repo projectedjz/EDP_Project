@@ -1,4 +1,5 @@
 using LearningAPI;
+using LearningAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -73,6 +74,10 @@ builder.Services.AddSwaggerGen(options =>
         { securityScheme, new List<string>() }
     });
 });
+
+
+// Register PromotionEngine
+builder.Services.AddScoped<PromotionEngine>();
 
 var app = builder.Build();
 

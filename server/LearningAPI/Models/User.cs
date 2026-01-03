@@ -31,7 +31,7 @@ namespace LearningAPI.Models
         public Customer? Customer { get; set; }
 
         // 1–0..1 Navigation
-        public Cart? Cart { get; set; }
+        public CartItem? CartItems { get; set; }
 
         // 1–many Navigation
         public List<Order>? Orders { get; set; }

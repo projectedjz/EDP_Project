@@ -27,7 +27,7 @@ namespace LearningAPI
         public DbSet<Product> Products { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Location> Locations { get; set; }
-        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<PaymentTracking> PaymentTrackings { get; set; }
         public DbSet<GBLSession> GBLSessions { get; set; }
@@ -36,6 +36,8 @@ namespace LearningAPI
         public DbSet<Campaign> Campaigns { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
         public DbSet<PromotionItem> PromotionItems { get; set; }
+        public DbSet<CartHeader> CartHeaders { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,9 +57,9 @@ namespace LearningAPI
 
             // User to Cart (1:0..1)
             modelBuilder.Entity<User>()
-                .HasOne(u => u.Cart)
+                .HasOne(u => u.CartItems)
                 .WithOne(c => c.User)
-                .HasForeignKey<Cart>(c => c.UserId)
+                .HasForeignKey<CartItem>(c => c.UserId)
                 .IsRequired(false);
 
             // User to Orders (1:many)
@@ -75,9 +77,9 @@ namespace LearningAPI
                 .IsRequired(false);
 
             // Cart to GBLSession (1:0..1)
-            modelBuilder.Entity<Cart>()
+            modelBuilder.Entity<CartItem>()
                 .HasOne(c => c.Session)
-                .WithOne(s => s.Cart)
+                .WithOne(s => s.CartItems)
                 .HasForeignKey<GBLSession>(s => s.CartId)
                 .IsRequired(false);
 
@@ -102,7 +104,13 @@ namespace LearningAPI
                 .HasForeignKey(pi => pi.ProductId)
                 .IsRequired(false);
 
-
+            // CartItem.CartId -> CartHeader.CartId (many:1)
+            modelBuilder.Entity<CartItem>()
+                .HasOne(ci => ci.CartHeader)
+                .WithMany(ch => ch.CartItems)
+                .HasForeignKey(ci => ci.CartItemId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired(false);
         }
     }
 }

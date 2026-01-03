@@ -19,10 +19,9 @@ namespace LearningAPI.Migrations
                 .HasAnnotation("ProductVersion", "8.0.22")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Cart", b =>
+            modelBuilder.Entity("CartItem", b =>
                 {
-                    b.Property<int>("CartId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("CartItemId")
                         .HasColumnType("int");
 
                     b.Property<int>("CartQuantity")
@@ -37,14 +36,14 @@ namespace LearningAPI.Migrations
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("CartId");
+                    b.HasKey("CartItemId");
 
                     b.HasIndex("ProductId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Carts");
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.AuditLog", b =>
@@ -109,6 +108,38 @@ namespace LearningAPI.Migrations
                     b.HasKey("CampaignId");
 
                     b.ToTable("Campaigns");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.CartHeader", b =>
+                {
+                    b.Property<int>("CartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("cart_id");
+
+                    b.Property<int?>("AppliedAutoPromotionId")
+                        .HasColumnType("int")
+                        .HasColumnName("applied_auto_promotion_id");
+
+                    b.Property<int?>("AppliedCodePromotionId")
+                        .HasColumnType("int")
+                        .HasColumnName("applied_code_promotion_id");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("CartId");
+
+                    b.ToTable("CartHeaders");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.Category", b =>
@@ -345,11 +376,13 @@ namespace LearningAPI.Migrations
                         .HasColumnName("campaign_id");
 
                     b.Property<string>("DiscountType")
+                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)")
                         .HasColumnName("discount_type");
 
                     b.Property<decimal?>("DiscountValue")
+                        .IsRequired()
                         .HasColumnType("decimal(10,2)")
                         .HasColumnName("discount_value");
 
@@ -364,6 +397,10 @@ namespace LearningAPI.Migrations
                     b.Property<bool>("IsExclusive")
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("is_exclusive");
+
+                    b.Property<int?>("MaxQuantity")
+                        .HasColumnType("int")
+                        .HasColumnName("max_quantity");
 
                     b.Property<int?>("MinAmount")
                         .HasColumnType("int")
@@ -382,13 +419,25 @@ namespace LearningAPI.Migrations
                         .HasColumnType("tinyint(1)")
                         .HasColumnName("requires_code");
 
+                    b.Property<bool>("StackWithAuto")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("stack_with_auto");
+
+                    b.Property<bool>("StackWithCode")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("stack_with_code");
+
                     b.Property<DateTime?>("StartDatetime")
                         .HasColumnType("datetime(6)")
                         .HasColumnName("start_datetime");
 
-                    b.Property<int>("UsageCount")
+                    b.Property<int?>("UsageCount")
                         .HasColumnType("int")
                         .HasColumnName("usage_count");
+
+                    b.Property<int?>("UsageLimitTotal")
+                        .HasColumnType("int")
+                        .HasColumnName("usage_limit_total");
 
                     b.HasKey("PromotionId");
 
@@ -525,8 +574,13 @@ namespace LearningAPI.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Cart", b =>
+            modelBuilder.Entity("CartItem", b =>
                 {
+                    b.HasOne("LearningAPI.Models.CartHeader", "CartHeader")
+                        .WithMany("CartItems")
+                        .HasForeignKey("CartItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("LearningAPI.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
@@ -534,8 +588,10 @@ namespace LearningAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("LearningAPI.Models.User", "User")
-                        .WithOne("Cart")
-                        .HasForeignKey("Cart", "UserId");
+                        .WithOne("CartItems")
+                        .HasForeignKey("CartItem", "UserId");
+
+                    b.Navigation("CartHeader");
 
                     b.Navigation("Product");
 
@@ -566,7 +622,7 @@ namespace LearningAPI.Migrations
 
             modelBuilder.Entity("LearningAPI.Models.GBLSession", b =>
                 {
-                    b.HasOne("Cart", "Cart")
+                    b.HasOne("CartItem", "CartItems")
                         .WithOne("Session")
                         .HasForeignKey("LearningAPI.Models.GBLSession", "CartId");
 
@@ -574,7 +630,7 @@ namespace LearningAPI.Migrations
                         .WithMany("GBLSessions")
                         .HasForeignKey("UserId");
 
-                    b.Navigation("Cart");
+                    b.Navigation("CartItems");
 
                     b.Navigation("User");
                 });
@@ -695,7 +751,7 @@ namespace LearningAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Cart", b =>
+            modelBuilder.Entity("CartItem", b =>
                 {
                     b.Navigation("Session");
                 });
@@ -703,6 +759,11 @@ namespace LearningAPI.Migrations
             modelBuilder.Entity("LearningAPI.Models.Campaign", b =>
                 {
                     b.Navigation("Promotions");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.CartHeader", b =>
+                {
+                    b.Navigation("CartItems");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.Category", b =>
@@ -738,7 +799,7 @@ namespace LearningAPI.Migrations
 
             modelBuilder.Entity("LearningAPI.Models.User", b =>
                 {
-                    b.Navigation("Cart");
+                    b.Navigation("CartItems");
 
                     b.Navigation("Customer");
 

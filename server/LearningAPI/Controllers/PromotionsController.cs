@@ -51,7 +51,7 @@ namespace LearningAPI.Controllers
                 if (!campaignOk) return BadRequest("Invalid campaignId.");
             }
 
-            // Optional: validate products exist
+            // Validate products exist
             var productIds = dto.Items.Where(i => i.ProductId.HasValue).Select(i => i.ProductId!.Value).Distinct().ToList();
             var existingProductCount = await _db.Products.CountAsync(p => productIds.Contains(p.ProductId));
             if (existingProductCount != productIds.Count) return BadRequest("One or more productId is invalid.");
@@ -65,6 +65,8 @@ namespace LearningAPI.Controllers
                 IsExclusive = dto.IsExclusive,
                 MinAmount = dto.MinAmount,
                 MinQuantity = dto.MinQuantity,
+                UsageLimitTotal = dto.UsageLimitTotal,
+                MaxQuantity = dto.MaxQuantity,
                 UsageCount = 0,
                 StartDatetime = dto.StartDatetime,
                 EndDatetime = dto.EndDatetime,
@@ -97,12 +99,21 @@ namespace LearningAPI.Controllers
 
             if (promo is null) return NotFound();
 
+            if (dto.UsageLimitTotal.HasValue && promo.UsageCount.HasValue &&
+    dto.UsageLimitTotal.Value < promo.UsageCount.Value)
+            {
+                return BadRequest("usage_limit_total cannot be less than current usage_count.");
+            }
+
+
             promo.PromoCode = dto.PromoCode;
             promo.RequiresCode = dto.RequiresCode;
             promo.DiscountType = dto.DiscountType;
             promo.DiscountValue = dto.DiscountValue;
             promo.IsExclusive = dto.IsExclusive;
             promo.MinAmount = dto.MinAmount;
+            promo.UsageLimitTotal = dto.UsageLimitTotal;
+            promo.MaxQuantity = dto.MaxQuantity;
             promo.MinQuantity = dto.MinQuantity;
             promo.StartDatetime = dto.StartDatetime;
             promo.EndDatetime = dto.EndDatetime;

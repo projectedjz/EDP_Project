@@ -62,3 +62,36 @@ GET {{LearningAPI_HostAddress}}/user/auth
 Authorization: Bearer {{token}}
 
 ###
+
+@id=0
+DELETE {{LearningAPI_HostAddress}}/promotions/{id:int}?id={{id}}
+
+###
+
+GET {{LearningAPI_HostAddress}}/promotions/{id:int}?id={{id}}
+
+###
+
+PUT {{LearningAPI_HostAddress}}/promotions/{id:int}?id={{id}}
+Content-Type: application/json
+
+{
+  //PromotionUpdateDto
+}
+
+###
+
+POST {{LearningAPI_HostAddress}}/promotions
+Authorization: Bearer {{$bearerToken}}
+Content-Type: application/json
+
+{
+  //PromotionCreateDto
+}
+
+###
+
+GET {{LearningAPI_HostAddress}}/promotions
+Authorization: Bearer {{$bearerToken}}
+
+###

@@ -21,12 +21,15 @@ namespace LearningAPI.Models
 
         [Column("discount_type")]
         [MaxLength(10)]
+        [Required]
         public string? DiscountType { get; set; }
 
         [Column("discount_value", TypeName = "decimal(10,2)")]
+        [Required]
         public decimal? DiscountValue { get; set; }
 
         [Column("is_exclusive")]
+        [Required]
         public bool IsExclusive { get; set; } = false;
 
         [Column("min_amount")]
@@ -36,7 +39,7 @@ namespace LearningAPI.Models
         public int? MinQuantity { get; set; }
 
         [Column("usage_count")]
-        public int UsageCount { get; set; } = 0;
+        public int? UsageCount { get; set; }
 
         [Column("start_datetime")]
         public DateTime? StartDatetime { get; set; }
@@ -46,6 +49,19 @@ namespace LearningAPI.Models
 
         [Column("is_active")]
         public bool IsActive { get; set; } = true;
+
+        [Column("usage_limit_total")]
+        public int? UsageLimitTotal { get; set; }
+
+        [Column("max_quantity")]
+        public int? MaxQuantity { get; set; }
+
+        // Stacking flags (mutual compatibility)
+        [Column("stack_with_auto")]
+        public bool StackWithAuto { get; set; } = false;
+
+        [Column("stack_with_code")]
+        public bool StackWithCode { get; set; } = false;
 
         [Column("campaign_id")]
         public int? CampaignId { get; set; }

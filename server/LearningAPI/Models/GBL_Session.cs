@@ -24,7 +24,7 @@ namespace LearningAPI.Models
 
         // Navigation
         public User? User { get; set; }
-        public Cart? Cart { get; set; }
+        public CartItem? CartItems { get; set; }
 
         [JsonIgnore]
         public List<Order>? Orders { get; set; }

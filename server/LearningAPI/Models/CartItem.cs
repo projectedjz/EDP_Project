@@ -1,10 +1,11 @@
 ﻿using LearningAPI.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-public class Cart
+public class CartItem
 {
     [Key]
-    public int CartId { get; set; }
+    public int CartItemId { get; set; }
     public int CartQuantity { get; set; }
 
     public int? UserId { get; set; }
@@ -15,4 +16,8 @@ public class Cart
     public User? User { get; set; }
     public Product? Product { get; set; }
     public GBLSession? Session { get; set; }
+
+
+    [ForeignKey(nameof(CartItemId))]
+    public CartHeader? CartHeader { get; set; }
 }

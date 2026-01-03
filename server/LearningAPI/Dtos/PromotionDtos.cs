@@ -29,6 +29,12 @@ public class PromotionCreateDto
     public DateTime? EndDatetime { get; set; }
 
     public bool IsActive { get; set; } = true;
+
+    [Range(0, int.MaxValue)]
+    public int? UsageLimitTotal { get; set; }   // NULL = unlimited
+
+    [Range(1, int.MaxValue)]
+    public int? MaxQuantity { get; set; }    // NULL = unlimited
     public int? CampaignId { get; set; }
 
     public List<PromotionItemUpsertDto> Items { get; set; } = new();
