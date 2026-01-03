@@ -81,6 +81,36 @@ namespace LearningAPI.Migrations
                     b.ToTable("AuditLogs");
                 });
 
+            modelBuilder.Entity("LearningAPI.Models.Campaign", b =>
+                {
+                    b.Property<int>("CampaignId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("campaign_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("ImageFile")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)")
+                        .HasColumnName("image_file");
+
+                    b.Property<string>("Status")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("status");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("CampaignId");
+
+                    b.ToTable("Campaigns");
+                });
+
             modelBuilder.Entity("LearningAPI.Models.Category", b =>
                 {
                     b.Property<int>("CategoryId")
@@ -213,6 +243,9 @@ namespace LearningAPI.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
+                    b.Property<int?>("PromotionId")
+                        .HasColumnType("int");
+
                     b.Property<int>("SessionId")
                         .HasColumnType("int");
 
@@ -226,6 +259,8 @@ namespace LearningAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("OrderId");
+
+                    b.HasIndex("PromotionId");
 
                     b.HasIndex("SessionId");
 
@@ -296,6 +331,103 @@ namespace LearningAPI.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.Promotion", b =>
+                {
+                    b.Property<int>("PromotionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("promotion_id");
+
+                    b.Property<int?>("CampaignId")
+                        .HasColumnType("int")
+                        .HasColumnName("campaign_id");
+
+                    b.Property<string>("DiscountType")
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
+                        .HasColumnName("discount_type");
+
+                    b.Property<decimal?>("DiscountValue")
+                        .HasColumnType("decimal(10,2)")
+                        .HasColumnName("discount_value");
+
+                    b.Property<DateTime?>("EndDatetime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("end_datetime");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_active");
+
+                    b.Property<bool>("IsExclusive")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("is_exclusive");
+
+                    b.Property<int?>("MinAmount")
+                        .HasColumnType("int")
+                        .HasColumnName("min_amount");
+
+                    b.Property<int?>("MinQuantity")
+                        .HasColumnType("int")
+                        .HasColumnName("min_quantity");
+
+                    b.Property<string>("PromoCode")
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)")
+                        .HasColumnName("promo_code");
+
+                    b.Property<bool>("RequiresCode")
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("requires_code");
+
+                    b.Property<DateTime?>("StartDatetime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("start_datetime");
+
+                    b.Property<int>("UsageCount")
+                        .HasColumnType("int")
+                        .HasColumnName("usage_count");
+
+                    b.HasKey("PromotionId");
+
+                    b.HasIndex("CampaignId");
+
+                    b.ToTable("Promotions");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.PromotionItem", b =>
+                {
+                    b.Property<int>("PromotionItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("promotion_item_id");
+
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int")
+                        .HasColumnName("product_id");
+
+                    b.Property<int?>("PromotionId")
+                        .HasColumnType("int")
+                        .HasColumnName("promotion_id");
+
+                    b.Property<int?>("RequiredQty")
+                        .HasColumnType("int")
+                        .HasColumnName("required_qty");
+
+                    b.Property<string>("Role")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("role");
+
+                    b.HasKey("PromotionItemId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("PromotionId");
+
+                    b.ToTable("PromotionItems");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.Staff", b =>
@@ -468,6 +600,10 @@ namespace LearningAPI.Migrations
 
             modelBuilder.Entity("LearningAPI.Models.Order", b =>
                 {
+                    b.HasOne("LearningAPI.Models.Promotion", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("PromotionId");
+
                     b.HasOne("LearningAPI.Models.GBLSession", "Session")
                         .WithMany("Orders")
                         .HasForeignKey("SessionId")
@@ -513,6 +649,30 @@ namespace LearningAPI.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("LearningAPI.Models.Promotion", b =>
+                {
+                    b.HasOne("LearningAPI.Models.Campaign", "Campaign")
+                        .WithMany("Promotions")
+                        .HasForeignKey("CampaignId");
+
+                    b.Navigation("Campaign");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.PromotionItem", b =>
+                {
+                    b.HasOne("LearningAPI.Models.Product", "Product")
+                        .WithMany("PromotionItems")
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("LearningAPI.Models.Promotion", "Promotion")
+                        .WithMany("PromotionItems")
+                        .HasForeignKey("PromotionId");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Promotion");
+                });
+
             modelBuilder.Entity("LearningAPI.Models.Staff", b =>
                 {
                     b.HasOne("LearningAPI.Models.User", "User")
@@ -540,6 +700,11 @@ namespace LearningAPI.Migrations
                     b.Navigation("Session");
                 });
 
+            modelBuilder.Entity("LearningAPI.Models.Campaign", b =>
+                {
+                    b.Navigation("Promotions");
+                });
+
             modelBuilder.Entity("LearningAPI.Models.Category", b =>
                 {
                     b.Navigation("Products");
@@ -560,6 +725,15 @@ namespace LearningAPI.Migrations
             modelBuilder.Entity("LearningAPI.Models.Product", b =>
                 {
                     b.Navigation("Inventories");
+
+                    b.Navigation("PromotionItems");
+                });
+
+            modelBuilder.Entity("LearningAPI.Models.Promotion", b =>
+                {
+                    b.Navigation("Orders");
+
+                    b.Navigation("PromotionItems");
                 });
 
             modelBuilder.Entity("LearningAPI.Models.User", b =>

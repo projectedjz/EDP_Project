@@ -29,5 +29,8 @@ namespace LearningAPI.Models
 
         [JsonIgnore]
         public List<Inventory>? Inventories { get; set; }
+
+        [JsonIgnore]
+        public List<PromotionItem> PromotionItems { get; set; } = new();
     }
 }

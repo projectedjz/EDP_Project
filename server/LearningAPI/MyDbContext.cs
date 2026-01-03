@@ -33,6 +33,9 @@ namespace LearningAPI
         public DbSet<GBLSession> GBLSessions { get; set; }
         public DbSet<AuditLog> AuditLogs { get; set; }
         public DbSet<Tutorial> Tutorials { get; set; }
+        public DbSet<Campaign> Campaigns { get; set; }
+        public DbSet<Promotion> Promotions { get; set; }
+        public DbSet<PromotionItem> PromotionItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -77,6 +80,29 @@ namespace LearningAPI
                 .WithOne(s => s.Cart)
                 .HasForeignKey<GBLSession>(s => s.CartId)
                 .IsRequired(false);
+
+            // Promotion.campaign_id -> Campaign.campaign_id (1:N)
+            modelBuilder.Entity<Promotion>()
+                .HasOne(p => p.Campaign)
+                .WithMany(c => c.Promotions)
+                .HasForeignKey(p => p.CampaignId)
+                .IsRequired(false);
+
+            // Promotion_item.promotion_id -> Promotion.promotion_id (1:N)
+            modelBuilder.Entity<PromotionItem>()
+                .HasOne(pi => pi.Promotion)
+                .WithMany(p => p.PromotionItems)
+                .HasForeignKey(pi => pi.PromotionId)
+                .IsRequired(false); 
+
+            // Promotion_item.product_id -> Product.product_id (1:N)
+            modelBuilder.Entity<PromotionItem>()
+                .HasOne(pi => pi.Product)
+                .WithMany(p => p.PromotionItems)
+                .HasForeignKey(pi => pi.ProductId)
+                .IsRequired(false);
+
+
         }
     }
 }
