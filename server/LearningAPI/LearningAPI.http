@@ -40,9 +40,9 @@ POST {{LearningAPI_HostAddress}}/user/register
 Content-Type: application/json
 
 {
- "name": "Li Haiyun",
- "email": "li_haiyun@nyp.edu.sg",
- "password": "password123"
+ "name": "Ziv Oh",
+ "email": "zivoh07@gmail.com",
+ "password": "ZivOh123!"
 }
 
 ###
