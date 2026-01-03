@@ -162,6 +162,9 @@ namespace LearningAPI.Migrations
                     b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime");
 
+                    b.Property<DateTime>("HarvestDate")
+                        .HasColumnType("datetime");
+
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
 
@@ -290,6 +293,9 @@ namespace LearningAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<decimal>("SellQuantity")
+                        .HasColumnType("decimal(5,2)");
 
                     b.HasKey("ProductId");
 

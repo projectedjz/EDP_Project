@@ -420,3 +420,5 @@ FodyWeavers.xsd
 client/learning-react-app/.env.development
 client/learning-react-app/package.json
 client/learning-react-app/package.json
+/server/LearningAPI/appsettings.json
+/server/LearningAPI/appsettings.Development.json

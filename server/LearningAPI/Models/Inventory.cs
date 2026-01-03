@@ -11,6 +11,10 @@ namespace LearningAPI.Models
         public int Quantity { get; set; }
 
         [Column(TypeName = "datetime")]
+        public DateTime HarvestDate { get; set; }
+
+
+        [Column(TypeName = "datetime")]
         public DateTime ExpiryDate { get; set; }
 
         [Column(TypeName = "datetime")]

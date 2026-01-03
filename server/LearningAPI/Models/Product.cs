@@ -21,6 +21,9 @@ namespace LearningAPI.Models
         [Column(TypeName = "decimal(5,2)")]
         public decimal Price { get; set; }
 
+        [Column(TypeName = "decimal(5,2)")]
+        public decimal SellQuantity { get; set; }
+
         // FK
         public int CategoryId { get; set; }
 
