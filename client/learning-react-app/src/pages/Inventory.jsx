@@ -167,6 +167,7 @@ function Inventory() {
         })
         .join(",")
     );
+    
     const csvContent = [csvHeader, ...csvRows].join("\n");
     const blob = new Blob([csvContent], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
@@ -187,13 +188,13 @@ function Inventory() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const getExpiryStatus = (expiryDate) => {
+  const getExpiryStatus = (createdAt, expiryDate) => {
     const now = new Date();
     const expiry = new Date(expiryDate);
 
-    const diff = expiry - now;
+    const remainingMs = expiry - now;
 
-    if (diff <= 0) {
+    if (remainingMs <= 0) {
       return {
         label: "Expired",
         bg: "#ef4444",
@@ -201,7 +202,7 @@ function Inventory() {
       };
     }
 
-    const remainingHours = Math.floor(diff / (1000 * 60 * 60));
+    const remainingHours = Math.floor(remainingMs / (1000 * 60 * 60));
     const remainingDays = Math.floor(remainingHours / 24);
 
     let bg = "#22c55e";
