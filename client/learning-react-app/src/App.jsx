@@ -14,6 +14,9 @@ import http from './http';
 import UserContext from './contexts/UserContext';
 import AdminNavbar from "./components/AdminNavBar";
 import GBLNavBar from "./components/GBLNavBar";
+import Inventory from './pages/Inventory';
+import AddInventory from './pages/AddInventory';
+import EditInventory from './pages/EditInventory';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -49,9 +52,16 @@ function App() {
               <Route path={"/tutorials"} element={<Tutorials />} />
               <Route path={"/addtutorial"} element={<AddTutorial />} />
               <Route path={"/edittutorial/:id"} element={<EditTutorial />} />
+
+
               <Route path={"/register"} element={<Register />} />
               <Route path={"/login"} element={<Login />} />
               <Route path={"/form"} element={<MyForm />} />
+
+              <Route path={"/inventory"} element={<Inventory />} />
+              <Route path={"/addinventory"} element={<AddInventory />} />
+              <Route path={"/editinventory/:id"} element={<EditInventory />} />
+
             </Routes>
           </Container>
         </ThemeProvider>

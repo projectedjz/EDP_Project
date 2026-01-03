@@ -425,3 +425,6 @@ client/learning-react-app/package.json
 /server/LearningAPI/appsettings.json
 /server/LearningAPI/appsettings.Development.json
 /server/LearningAPI/LearningAPI.http
+server/appsettings.Development.json
+server/appsettings.json
+EDPdatabase.session.sql
