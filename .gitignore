@@ -422,3 +422,6 @@ client/learning-react-app/package.json
 client/learning-react-app/package.json
 /server/LearningAPI/appsettings.json
 /server/LearningAPI/appsettings.Development.json
+/server/LearningAPI/appsettings.json
+/server/LearningAPI/appsettings.Development.json
+/server/LearningAPI/LearningAPI.http
