@@ -29,6 +29,7 @@ import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import InventoryIcon from '@mui/icons-material/Inventory';
 
 const drawerWidth = 260;
 
@@ -48,6 +49,7 @@ function Navbar() {
   const navItems = [
     { label: "Dashboard", path: "/", icon: <DashboardOutlinedIcon /> },
     { label: "Tutorials", path: "/tutorials", icon: <DashboardOutlinedIcon /> },
+    { label: "Inventory", path: "/inventory", icon: <InventoryIcon /> },
   ];
 
   const handleDrawerToggle = () => {
